@@ -1,6 +1,7 @@
 package com.zhuofu;
 
 import com.spring.ManualApplicationContext;
+import com.zhuofu.service.UserInterface;
 import com.zhuofu.service.UserService;
 
 public class Test {
@@ -14,7 +15,10 @@ public class Test {
 //
 //        System.out.println(userService1 == userService2);
 
-        UserService userService = (UserService) applicationContext.getBean("userService");
+//        UserService userService = (UserService) applicationContext.getBean("userService");
+//        userService.test();
+
+        UserInterface userService = (UserInterface) applicationContext.getBean("userServiceImpl");
         userService.test();
     }
 }

@@ -29,6 +29,10 @@ public class ManualApplicationContext {
             String beanName = entry.getKey();
             BeanDefinition beanDefinition = entry.getValue();
             if(beanDefinition.getScope().equals("singleton")) {
+                // TODO 这里存在一个问题，如果依赖注入的bean还没生成，就不能依赖注入了，所以应该分为两个方法，一个是生成，一个是初始化
+                // TODO 单例依赖注入多例 没问题
+                // TODO 多例依赖注入多例 也没问题
+                // TODO 依赖注入单例就有问题，必须解析bean之间的关系，或者就是先创建每个single，再create，进行单独处理
                 Object bean = createBean(beanName, beanDefinition);
                 singleObjects.put(beanName, bean);
             }
@@ -57,7 +61,7 @@ public class ManualApplicationContext {
             }
 
             for(BeanPostProcessor beanPostProcessor: beanPostProcessorList) {
-                beanPostProcessor.postProcessBeforeInitialization(o, beanName);
+                o = beanPostProcessor.postProcessBeforeInitialization(o, beanName);
             }
 
             // 初始化
@@ -67,7 +71,7 @@ public class ManualApplicationContext {
 
             // BeanPostProcessor
             for(BeanPostProcessor beanPostProcessor: beanPostProcessorList) {
-                beanPostProcessor.postProcessAfterInitialization(o, beanName);
+                o = beanPostProcessor.postProcessAfterInitialization(o, beanName);
             }
 
             return o;
